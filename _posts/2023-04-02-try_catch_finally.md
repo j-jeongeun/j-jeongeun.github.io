@@ -12,9 +12,9 @@ tags: [try_catch_finally]
 
 테스트 코드는 아래의 시나리오와 같이 작성하였다.
 
-<img width="600" alt="image" src="https://user-images.githubusercontent.com/121920173/229329855-0463dca6-03a9-49e7-8ef2-2fb1d2d3850e.png">
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/121920173/229329855-0463dca6-03a9-49e7-8ef2-2fb1d2d3850e.png">
 
-## 1. 테스트 코드
+## 1. finally문 여부에 따른 테스트 코드
 
 <img width="600" alt="image" src="https://user-images.githubusercontent.com/121920173/229298205-43ccb794-5664-4739-a963-ffe9e458b776.png">
 
@@ -29,6 +29,24 @@ tags: [try_catch_finally]
 <img width="900" alt="image" src="https://user-images.githubusercontent.com/121920173/229298481-993555bd-5bdb-4b47-85a0-1f015cac0441.png">
 
 finally문이 추가된 코드에서는 처음 테스트 코드와 같이 ArrayIndexOutOfBoundsException이 발생하지만 return되는 값은 finally문의 데이터라는 것을 확인할 수 있다.
+
+**그런데 이때, catch문에서 예외 처리를 못하는 다른 예외가 발생한다면 어떻게 될까?**
+
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/121920173/229517881-5e99cb1d-bf98-40a8-902a-cf6318cede56.png">
+
+<img width="220" alt="image" src="https://user-images.githubusercontent.com/121920173/229519128-d6ebbf75-d2c1-4369-b274-0cc31dee588e.png">
+
+출력된 결과를 확인해보면 try문에서 발생한 예외가 무시된다.  
+해당 코드에서 예상한 결과는 NullPointerException이 발생하는 거였지만,  
+finally절에서 return문 때문에 try문에서 발생한 예외는 무시된다.
+
+만약, finally문의 return 구문이 없다면?
+
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/121920173/229520222-e17760cd-0825-4263-8241-59cd1d6afc16.png">
+
+<img width="923" alt="image" src="https://user-images.githubusercontent.com/121920173/229520381-20c8a4f3-ba1b-4b5c-8474-8c1946207078.png">
+
+예상대로 NullPointerException 예외가 발생한 것을 알 수 있다.
 
 ## 2. 그렇다면 왜 이런 결과가 나오는 걸까?
 
@@ -64,6 +82,9 @@ finally문이 필수는 아니지만 finally문을 넣어주게 되면 무조건
 finally문에서는 return문을 사용하지 말자.  
 내가 의도하지 않은 결과가 나올 수 있다.  
 하지만 try_catch문의 실행 이후 공통적으로 수행되어야 코드가 있다면 finally문을 이용하면 중복 코드가 사라지고 간결하게 나타낼 수 있다.
+
+**참고
+https://stackoverflow.com/questions/18205493/can-we-use-return-in-finally-block
 
 <script src="https://utteranc.es/client.js"
         repo="j-jeongeun/github.io.comments"
