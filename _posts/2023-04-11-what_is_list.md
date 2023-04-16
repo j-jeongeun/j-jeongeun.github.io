@@ -395,6 +395,9 @@ else문에서 return 되는 x 또한 해당 인덱스의 값이다.
 
 <script src="https://giscus.app/client.js"
         data-repo="j-jeongeun/github.io.comments"
+        data-repo-id="R_kgDOJIg9UQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJIg9Uc4CVz67"
         data-mapping="pathname"
         data-strict="0"
         data-reactions-enabled="1"

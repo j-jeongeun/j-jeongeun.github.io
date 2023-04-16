@@ -88,6 +88,9 @@ https://stackoverflow.com/questions/18205493/can-we-use-return-in-finally-block
 
 <script src="https://giscus.app/client.js"
         data-repo="j-jeongeun/github.io.comments"
+        data-repo-id="R_kgDOJIg9UQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJIg9Uc4CVz67"
         data-mapping="pathname"
         data-strict="0"
         data-reactions-enabled="1"
