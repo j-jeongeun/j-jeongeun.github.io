@@ -83,13 +83,18 @@ finally문에서는 return문을 사용하지 말자.
 내가 의도하지 않은 결과가 나올 수 있다.  
 하지만 try_catch문의 실행 이후 공통적으로 수행되어야 코드가 있다면 finally문을 이용하면 중복 코드가 사라지고 간결하게 나타낼 수 있다.
 
-**참고
+**참고  
 https://stackoverflow.com/questions/18205493/can-we-use-return-in-finally-block
 
-<script src="https://utteranc.es/client.js"
-        repo="j-jeongeun/github.io.comments"
-        issue-term="pathname"
-        theme="github-light"
+<script src="https://giscus.app/client.js"
+        data-repo="j-jeongeun/github.io.comments"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="ko"
         crossorigin="anonymous"
         async>
 </script>

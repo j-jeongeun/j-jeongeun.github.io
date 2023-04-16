@@ -116,7 +116,7 @@ newCapacity = 22, minCapacity = 16으로 if절은 패스하고 return newCapacit
 
 이렇게 많은 과정을 통해 list에 값이 추가된다.  
 
-### 2.3 값이 중간된 추가된 경우
+### 2.3 값이 중간에 추가된 경우
 
 ![image](https://user-images.githubusercontent.com/121920173/231163531-5b648231-4039-40f8-96d9-bc655b93179c.png)
 
@@ -178,7 +178,31 @@ LinkedList의 중간에 값이 추가된 경우를 열차의 칸들로 설명하
 
 ## 4. add() 실행 속도 비교
 
-**차후 추가**
+데이터를 추가하는 경우도 2가지로 나누어 비교해 보았다.
+
+1. 순차적으로 데이터를 추가할 경우
+2. 중간에 데이터를 추가할 경우
+
+### 4-1. 순차적으로 데이터를 추가할 경우
+
+<img width="584" alt="image" src="https://user-images.githubusercontent.com/121920173/232197523-986dedba-8294-457d-9450-b35e6497f258.png">
+
+`설명하기 앞서 해당 테스트 코드는 정확한 속도 비교를 위해 nanoTime()으로 측정되었다.`
+
+결과를 통해 알 수 있듯이 순차적으로 데이터를 추가할 경우 ArrayList가 LinkedList보다 약 3배 빠르다.
+
+### 4-2. 중간에 데이터를 추가할 경우
+
+그렇다면 중간에 데이터를 추가할 경우 어떤 결과가 나올까?
+
+![image](https://user-images.githubusercontent.com/121920173/232236228-b8bec387-0fb9-410f-82e8-ed297676a02d.png)
+
+![image](https://user-images.githubusercontent.com/121920173/232236573-38655189-5743-4572-8d96-f6959617a059.png)
+
+10000개의 데이터가 있는 list에서는 10개의 데이터를 중간에 추가할 때는 ArrayList와 LinkedList의 속도 차이가 크게 나지 않는다.  
+하지만 데이터의 전체 크기 그리고 중간에 삽입되는 데이터가 늘어날수록 ArrayList와 LinkedList의 수행 속도 차이가 확연히 난다는 걸 확인할 수 있다.
+
+순차적으로 추가되는 데이터의 경우 ArrayList가 중간에 데이터가 추가될 경우 LinkedList의 속도가 빠르다는 결론을 얻을 수 있다.
 
 ## 5. get()
 
@@ -212,6 +236,10 @@ get()은 수행 속도 비교를 하지 않아도 ArrayList가 빠르다는 것�
 나는 예외가 발생하는지 몰랐다...
 
 그렇다면 실제 테스트 코드를 통해 확인해보자.
+
+<details>
+<summary>IndexOutOfBoundsException 이야기</summary>
+<div markdown="1">
 
 <img width="706" alt="image" src="https://user-images.githubusercontent.com/121920173/230785738-c36867d7-1e4c-4615-b5d9-9607b6a11562.png">
 
@@ -251,6 +279,52 @@ get()은 수행 속도 비교를 하지 않아도 ArrayList가 빠르다는 것�
 
 `es[size = newSize] = null`
 
+</div>
+</details>
+
+<br>
+
+<img width="620" alt="image" src="https://user-images.githubusercontent.com/121920173/232194579-c82f2cff-0d8c-47e7-bdb5-19ce420d02a1.png">
+
+<img width="503" alt="image" src="https://user-images.githubusercontent.com/121920173/232194504-a993519d-5439-4ff6-8d9c-963021258640.png">
+
+<img width="244" alt="image" src="https://user-images.githubusercontent.com/121920173/232194682-f2523b75-2516-4319-94bf-da44e00e53c3.png">
+
+<img width="385" alt="image" src="https://user-images.githubusercontent.com/121920173/232192557-f640ff7c-34b5-49cc-ae9f-65d9e67ec04f.png">
+
+디버깅을 통해 remove() 내부 코드를 확인해보면 List의 크기에 변화가 생겼으므로 modCount++가 증가하고 해당 인덱스의 값을 삭제하고 iterator의next()를 통해 다음 인덱스 값을 호출할 때, checkForComodification()에서 ConcurrentModificationException 예외가 발생한다.
+
+그렇다면 해당 예외를 발생하지 않게 하는 방법에 어떤 방법이 있을까?  
+해당 예외는 iterator의 next()를 호출하면서 발생하는 예외이다.  
+가장 쉽게 생각할 수 있는 방법은 일반 for문을 이용하는 방법이다.  
+하지만 주석을 통해 설명했듯이 일반 for문에서는 IndexOutOfBoundsException가 발생한다.
+
+IndexOutOfBoundsException와 ConcurrentModificationException가 발생하지 않는 방법에 대해 알아보자.
+
+1. 역순으로 조회
+2. removeAll() 사용
+3. Iterator의 remove() 사용
+4. removeIf() 사용
+5. stream.filter() 사용
+
+총 5가지의 방법을 제시하였으나 1번 방법이 어떤 예외를 해결한다라고 보기보다  
+5가지 방법 모두 2가지 예외를 발생시키지 않는 방법이다라고 생각하면 좋을 거 같다.
+
+총 5가지 방법을 제시하였으나 결론부터 말하는 추천 사용방법은 4, 5번이다.  
+이유는 각 코드를 보면서 이야기해보자.
+
+![image](https://user-images.githubusercontent.com/121920173/232195762-03f52a7f-7745-4196-b1de-90eedc3a91b7.png)
+
+![image](https://user-images.githubusercontent.com/121920173/232196346-826e2574-1a00-4275-8713-df1349ab8d3f.png)
+
+코드의 실행속도와 예외없이 실행되는 것도 중요하지만 놓칠 수 없는 것이 **가독성**이다.  
+간단한 코드이기 때문에 1, 2, 3번의 파악이 어려운 것은 아니지만 실제로는 이렇게 간단하게 작성할 수 있는 코드는 몇 없을 것이다.  
+1, 2, 3번에 비해 4, 5번에 작성된 코드를 보자.  
+깔끔하다!!  
+removeIf를 이용한 4번의 코드가 가장 명확하다.  
+5번 코드로 작성할 경우 유의할 점은 filter를 통해 나온 결과는 새로운 List로 받아 사용해야 한다는 것이다.  
+만약 기존 list의 값이 유지되어야 한다면 5번을 그렇지 않다면 4번으로 사용하면 좋을 거 같다.
+
 이렇게 ArrayList에서 remove() 메소드가 실행될 때 일어나는 내부 코드를 디버깅을 통해 알아보았다.
 
 ## 7. remove() - LinkedList
@@ -287,11 +361,26 @@ else문에서 return 되는 x 또한 해당 인덱스의 값이다.
 결론적으로 해당 index의 앞 뒤 값을 재할당 해주고
 해당 item값은 null로 할당하고 size는 -1해준다.
 
-그래서 반복문 내에서 remove()를 수행하게 되면 `IndexOutOfBoundsException` 예외가 발생하게 되는 것이다.
-
 ## 8. remove() 실행 속도 비교
 
-**차후 추가**
+데이터를 삭제하는 경우도 2가지로 나누어 비교해 보았다.
+
+1. 순차적으로 데이터를 삭제할 경우
+2. 중간에 데이터를 삭제할 경우
+
+### 8-1. 순차적으로 데이터를 삭제할 경우
+
+![image](https://user-images.githubusercontent.com/121920173/232237305-415bd14a-8649-40d0-959b-7925467d98ed.png)
+
+50000개 이상의 데이터를 순차적으로 삭제할 경우(해당 테스트에서는 마지막 인덱스부터 순서대로 삭제하였다.) ArrayList와 LinkedList의 수행 속도 차이가 약 2배 정도 난다는 것을 확인할 수 있다.
+
+### 8-2. 중간에 데이터를 삭제할 경우
+
+![image](https://user-images.githubusercontent.com/121920173/232238158-812a0144-6e27-4fb6-afd6-c425bbe066fc.png)
+
+5000개의 데이터가 있는 list에서는 중간의 랜덤 인덱스 값 10개를 삭제할 때는 LinkedList가 ArrayList보다 빠르다는 것을 확인할 수 있다.
+
+순차적으로 삭제되는 데이터의 경우 ArrayList가 중간에 데이터가 삭제될 경우 LinkedList의 속도가 빠르다는 결론을 얻을 수 있다.
 
 ## 9. 결론
 
@@ -302,13 +391,17 @@ else문에서 return 되는 x 또한 해당 인덱스의 값이다.
 솔직히 생각했던 것보다 훨씬 복잡하고 많은 과정을 거치고 있다는 것을 보고 놀랐다.  
 우리는 단순히 데이터를 추가, 삭제만 할 뿐이지 내부 구조가 어떻게 되어 있는지 몰랐기 때문이다.
 
-ArrayList와 LinkedList의 내부 구조를 확인하면서 정리한 글의 양이 엄청나게 길어졌다.  
-좀 더 다듬고 간략히 소개하고 싶기도 했지만 아직은 글을 명확하고 읽기 쉽게 쓴다는게 어려운 거 같다.
+**순차적으로 데이터를 추가/삭제 할 때는 ArrayList가 List의 중간에 데이터를 추가/삭제 할 때는 LinkedList가 조회를 할때는 ArrayList의 속도가 빠르다는 것을 확인할 수 있었다.**
 
-<script src="https://utteranc.es/client.js"
-        repo="j-jeongeun/github.io.comments"
-        issue-term="pathname"
-        theme="github-light"
+<script src="https://giscus.app/client.js"
+        data-repo="j-jeongeun/github.io.comments"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="ko"
         crossorigin="anonymous"
         async>
 </script>
