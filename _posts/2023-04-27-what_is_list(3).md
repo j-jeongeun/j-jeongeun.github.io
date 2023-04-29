@@ -159,7 +159,7 @@ private void addedInTheMiddleLinkedList() {
 ```
 
 ### 2-1. 10,000개의 데이터의 1,000개의 데이터를 추가할 경우 - 결과
- 1![image](https://user-images.githubusercontent.com/121920173/235306328-c90c68e7-41d9-4e2d-96dd-a24c3f25ee6f.png)
+![image](https://user-images.githubusercontent.com/121920173/235306328-c90c68e7-41d9-4e2d-96dd-a24c3f25ee6f.png)
 
 ### 2-2. 50,000개의 데이터의 1,000개의 데이터를 추가할 경우 - 결과
 ![image](https://user-images.githubusercontent.com/121920173/235306397-f06373cd-781f-417e-8060-30dcf3a71332.png)
