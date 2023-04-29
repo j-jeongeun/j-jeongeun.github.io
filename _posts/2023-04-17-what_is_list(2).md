@@ -136,7 +136,7 @@ private long addedInTheMiddleLinkedList() {
 해당 결과와 그 이유에 대해서는 다음 글에서 소개할 예정이니 참고하길 바란다.      
 </span>
 
-👉🏻 [당신이 알던 LinkedList가 아니다.](https://j-jeongeun.github.io/posts/what_is_list(3)/)
+👉🏻 [LinkedList가 과연 ArrayList보다 빠를까?](https://j-jeongeun.github.io/posts/what_is_list(3)/)
 
 ## 2. remove() 실행 속도 비교
 
