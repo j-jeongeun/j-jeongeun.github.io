@@ -1,16 +1,16 @@
 ---
-title: 외부 API와 통신하기
+title: http 라이브러리
 date: 2023-08-22
-categories: [HTTP]
-tags: [외부 API 통신, HTTP 통신]
+categories: [HTTP 라이브러리]
+tags: [HTTP 라이브러리]
 ---
 
 개인 프로젝트를 진행하면서 외부 데이터 API를 호출해야 하는 경우가 생겼다.  
 http 통신을 주고 받는 게 기본적으로 알고 있어야 하는 사항일 수 있지만, 기존 회사의 업무를 진행하면서 외부 API를 사용하는 경우가 거의 없어서 통신을 주고 받는 어떤 방법들이 있고 어떤 방법을 써야 하는지 몰랐다.
 
-그래서 이번에 http 통신을 할 수 있는 여러 가지 방법들에 대해 알아보고 프로젝트에 적용해보기로 하였다.
+그래서 이번에 http 통신을 하게 해주는 여러 라이브러리들을 알아보고 프로젝트에 적용해보기로 하였다.
 
-## 1. HTTP 통신 방법
+## 1. HTTP 라이브러리 소개
 
 우선, 가장 오래 사용되어 온 `HttpURLConnection`부터 가장 직관적이고 간편한 `OpenFeign`까지 5가지에 대해서 설명하겠다.
 
@@ -167,10 +167,7 @@ void webClientTest() {
 ## 6. OpenFeign
 
 `OpenFeign`은 `Netflix`에서 만든 `선언적`인 HTTP Client 라이브러리이다.  
-`Netflix`에서 개발하고 내부적으로 사용하고 있었으나, 이후 사용 및 개발을 중단하고 오픈소스로 바뀌었다.  
-(여기서 말하는 `Netfilx`는 우리가 생각하는 그 `Netfilx`라고 한다. 🫢)
-
-<img width="300" alt="image" src="https://github.com/j-jeongeun/j-jeongeun.github.io/assets/121920173/adda16c1-46e5-4b84-b03a-2c845a031a95">
+`Netflix`에서 개발하고 내부적으로 사용하고 있었으나, 이후 사용 및 개발을 중단하고 오픈소스로 바뀌었다.
 
 `OpenFeign`은 `인터페이스`를 생성하여 `annotation`을 선언하여 사용한다. 위에서 작성한 다른 예제 코드와 달리 아래의 예제 코드는 확실히 간결해졌다.
 
@@ -188,14 +185,23 @@ public interface TestService {
 
 ## 7. 결론
 
-가장 많이 쓰이는 http 통신 방법 5가지에 대해서 알아 보았다.  
-이 외에도 `OkHttp`나 `Retrofit` 등과 같이 http 통신을 위한 방법에는 여러가지가 있다.
+가장 많이 쓰이는 http 라이브러리 5가지에 대해서 알아 보았다.  
+이 외에도 `OkHttp`나 `Retrofit` 등과 같이 http 통신을 위한 여러 라이브러리가 있다.
 
 위 방법들 중, 어떤 방법이 정답이고 무조건 이 방법을 써야 한다는 건 없지만,
 사용하고자 하는 프로젝트와 용도, 사용자 수 등과 같은 조건 등을 따져 적합한 방법을 찾아 사용하면 좋을 것 같다.
 
-(+ `WebClient`는 러닝커브 기간을 고려해 다음번에 다시 사용해보기로 하고,  
-이번 프로젝트에는 `RestTemplate`나 `OpenFeign`을 이용하여 외부 API DATA를 받아오기로 결정했다.)
+-   HttpURLConnection
+-   HttpClient
+-   RestTemplate
+-   WebClient
+-   OpenFeign
+
+예를 들어, 소개한 5가지 방법 중에서 `HttpURLConnection`와 `HttpClient`는 잦은 외부 API 호출 시, 코드의 가독성을 떨어뜨릴 수 있기 때문에, 이 2가지 방법보다는 `RestTemplate` 방법을 추천한다.  
+하지만, `RestTemplate`는 동기방식만 지원하기 때문에 비동기 통신이 필요하다면 `WebClient`을 이용한 방법을 추천하며,
+`나는 코드가 지저분해지는게 싫어! 간편하게 쓰고 싶어!!`라고 한다면 `OpenFeign` 방법을 추천한다.  
+하지만, 라이브러리 소개글에서도 말했듯이 `OpenFeign`은 테스트 코드를 짜기에는 어렵다는 단점이 있다.  
+또한, 나처럼 HTTP 라이브러리를 처음 써본다면 `OpenFeign`이 간편하고 깔끔해보이지만, 다른 라이브러리들에 비해 HTTP 통신의 요청/응답이 코드에서 보이지 않아 너무 생략화된 방법이라고 생각이 들 수도 있을거 같다.
 
 **출처**  
 https://jie0025.tistory.com/531  
